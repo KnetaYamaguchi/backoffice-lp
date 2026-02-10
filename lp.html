@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>バックオフィス改善サポート | 業務フロー・マニュアル整備の専門家</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:    #1a1a2e;
+      --navy:   #16213e;
+      --accent: #e63946;
+      --gold:   #f4a261;
+      --light:  #f8f7f4;
+      --muted:  #6b7280;
+      --border: #e5e0d8;
+      --white:  #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--light);
+      color: var(--ink);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(248, 247, 244, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--navy);
+    }
+
+    .header-cta {
+      background: var(--accent);
+      color: var(--white);
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .header-cta:hover { background: #c1121f; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5rem 5rem 6rem;
+      position: relative;
+    }
+
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      right: -40px;
+      top: 0; bottom: 0;
+      width: 80px;
+      background: var(--navy);
+      clip-path: polygon(0 0, 0% 100%, 100% 50%);
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.45;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.9;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(230,57,70,0.35);
+      width: fit-content;
+    }
+    .hero-btn:hover {
+      background: #c1121f;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(230,57,70,0.45);
+    }
+
+    .hero-right {
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 4rem 5rem 6rem;
+    }
+
+    .hero-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.8rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease both;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.2s; }
+    .stat-card:nth-child(4) { animation-delay: 0.3s; }
+
+    .stat-number {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-number span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── PAIN SECTION ── */
+    .pain {
+      padding: 6rem 0;
+      background: var(--white);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 3rem;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .pain-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 1.8rem;
+      position: relative;
+      background: var(--light);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .pain-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .pain-num {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+
+    .pain-text {
+      font-size: 0.92rem;
+      color: var(--ink);
+      line-height: 1.8;
+    }
+
+    .pain-text strong {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── SOLUTION ── */
+    .solution {
+      padding: 6rem 0;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .solution::before {
+      content: 'SOLUTION';
+      position: absolute;
+      right: -2rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      font-size: 8rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.03);
+      letter-spacing: 0.1em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .solution .section-label { color: var(--gold); }
+    .solution .section-title { color: var(--white); }
+
+    .solution-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .solution-text {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.95rem;
+      line-height: 2;
+    }
+
+    .solution-text p { margin-bottom: 1.2rem; }
+
+    .solution-text strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .solution-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+      transition: background 0.2s;
+    }
+
+    .solution-list li:hover { background: rgba(255,255,255,0.1); }
+
+    .sol-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    .sol-content strong {
+      display: block;
+      color: var(--white);
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .sol-content span {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      padding: 6rem 0;
+      background: var(--light);
+    }
+
+    .service-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(26,26,46,0.1);
+    }
+
+    .service-card.featured {
+      border-color: var(--accent);
+      background: var(--navy);
+    }
+
+    .service-card.featured::before {
+      content: '人気';
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    .service-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .service-card.featured .service-tag { color: var(--gold); }
+
+    .service-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card.featured .service-name { color: var(--white); }
+
+    .service-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 1rem 0;
+      font-family: 'Noto Serif JP', serif;
+    }
+
+    .service-price span {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 400;
+    }
+
+    .service-card.featured .service-price span { color: rgba(255,255,255,0.5); }
+
+    .service-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card.featured .service-desc { color: rgba(255,255,255,0.6); }
+
+    .service-features {
+      list-style: none;
+      font-size: 0.83rem;
+      color: var(--ink);
+      line-height: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .service-card.featured .service-features { color: rgba(255,255,255,0.8); }
+
+    .service-features li::before {
+      content: '✓ ';
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      padding: 7rem 0;
+      background: var(--white);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(230,57,70,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-section .section-label {
+      display: block;
+      text-align: center;
+    }
+
+    .cta-section .section-title {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .cta-lead {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 2;
+    }
+
+    .cta-box {
+      background: var(--navy);
+      border-radius: 6px;
+      padding: 3.5rem 4rem;
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+    }
+
+    .cta-box-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+    }
+
+    .cta-box-sub {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .cta-main-btn {
+      display: block;
+      width: 100%;
+      background: var(--accent);
+      color: var(--white);
+      padding: 1.2rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      border-radius: 3px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(230,57,70,0.35);
+      text-align: center;
+    }
+
+    .cta-main-btn:hover {
+      background: #c1121f;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(230,57,70,0.45);
+    }
+
+    .cta-note {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 1rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-left > * {
+      animation: fadeInUp 0.7s ease both;
+    }
+    .hero-eyebrow { animation-delay: 0.1s; }
+    .hero-title   { animation-delay: 0.2s; }
+    .hero-sub     { animation-delay: 0.3s; }
+    .hero-btn     { animation-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .hero-left {
+        padding: 8rem 2rem 4rem;
+      }
+
+      .hero-left::after { display: none; }
+
+      .hero-right {
+        padding: 3rem 2rem;
+      }
+
+      .hero-stat-grid {
+        max-width: 100%;
+      }
+
+      .pain-grid,
+      .service-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .solution-body {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .cta-box {
+        padding: 2.5rem 2rem;
+      }
+
+      header { padding: 1rem 1.2rem; }
+      .logo { font-size: 0.88rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">BackOffice Pro</div>
+    <a href="#cta" class="header-cta">無料相談を予約する</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Backoffice Consulting</p>
+      <h1 class="hero-title">
+        「誰かに<em>任せたい</em>」<br>
+        その悩み、<br>
+        まるごと引き受けます。
+      </h1>
+      <p class="hero-sub">
+        バックオフィス専任歴10年以上。<br>
+        業務フロー設計・マニュアル整備のプロが、<br>
+        経理・労務・契約管理の課題を整理します。<br>
+        まず30分、無料でお話しください。
+      </p>
+      <a href="#cta" class="hero-btn">→ 無料30分相談を予約する</a>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat-grid">
+        <div class="stat-card">
+          <div class="stat-number">10<span>年以上</span></div>
+          <div class="stat-label">バックオフィス<br>専任経験</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">30<span>日以内</span></div>
+          <div class="stat-label">業務フロー<br>整備・納品</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2<span>時間〜</span></div>
+          <div class="stat-label">スポット相談<br>対応可能</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">¥0<span>初回</span></div>
+          <div class="stat-label">30分の<br>無料相談</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIN -->
+  <section class="pain">
+    <div class="container">
+      <p class="section-label">Pain Point</p>
+      <h2 class="section-title">
+        こんなお悩み、<br>抱えていませんか？
+      </h2>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-num">01</div>
+          <div class="pain-text">
+            <strong>バックオフィスを<br>一人で抱えている</strong>
+            経理・労務・契約管理をすべて社長か兼務スタッフが担い、本来の仕事に集中できない。
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-num">02</div>
+          <div class="pain-text">
+            <strong>業務が属人化している</strong>
+            担当者がいなくなると止まる。マニュアルがなく、いつも「あの人に聞けばわかる」状態。
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-num">03</div>
+          <div class="pain-text">
+            <strong>どこから手をつけるか<br>わからない</strong>
+            問題があるとは分かっているのに、優先順位も改善方法も見えないまま時間が過ぎる。
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-num">04</div>
+          <div class="pain-text">
+            <strong>採用するほどでは<br>ないと思っている</strong>
+            月20〜30時間の業務のために正社員は雇えない。でも誰かに任せたい。
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-num">05</div>
+          <div class="pain-text">
+            <strong>入退社・契約のたびに<br>バタバタする</strong>
+            同じミスが繰り返される。チェックリストもなく、抜け漏れが不安。
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-num">06</div>
+          <div class="pain-text">
+            <strong>外注先に何を<br>頼めばいいかわからない</strong>
+            丸ごと頼みたいが、どこまで依頼できるか、何が適正価格かが不明。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="solution">
+    <div class="container">
+      <div class="solution-body">
+        <div>
+          <p class="section-label">Solution</p>
+          <h2 class="section-title">
+            「分かる人」が<br>
+            横にいるだけで、<br>
+            変わります。
+          </h2>
+          <div class="solution-text">
+            <p>
+              バックオフィスの課題は、<strong>「知識がある人に整理してもらう」</strong>だけで、8割が解決します。
+            </p>
+            <p>
+              10年間、複数の組織でバックオフィスを担当してきた経験から、どの業種・規模にも共通する「詰まりやすいポイント」が見えています。
+            </p>
+            <p>
+              雇用よりも、まず<strong>「外部の専門家に相談する」</strong>という選択肢があります。
+            </p>
+          </div>
+        </div>
+        <ul class="solution-list">
+          <li>
+            <div class="sol-icon">📋</div>
+            <div class="sol-content">
+              <strong>業務フロー設計・可視化</strong>
+              <span>現状の整理から改善フロー作成まで</span>
+            </div>
+          </li>
+          <li>
+            <div class="sol-icon">📝</div>
+            <div class="sol-content">
+              <strong>マニュアル・テンプレート整備</strong>
+              <span>誰でも使えるドキュメントを一から作成</span>
+            </div>
+          </li>
+          <li>
+            <div class="sol-icon">📊</div>
+            <div class="sol-content">
+              <strong>経理・労務・契約の相談対応</strong>
+              <span>専門家への橋渡しも含めてサポート</span>
+            </div>
+          </li>
+          <li>
+            <div class="sol-icon">💬</div>
+            <div class="sol-content">
+              <strong>月次継続サポート</strong>
+              <span>Slack＋定例MTGで継続的にフォロー</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <p class="section-label">Services & Pricing</p>
+      <h2 class="section-title">サービスと料金</h2>
+      <div class="service-cards">
+
+        <div class="service-card">
+          <p class="service-tag">まずはここから</p>
+          <h3 class="service-name">スポット相談</h3>
+          <div class="service-price">¥15,000<span>／2時間</span></div>
+          <p class="service-desc">
+            オンラインで2時間、バックオフィスの悩みをすべて話してください。整理と方針をその場でお伝えします。
+          </p>
+          <ul class="service-features">
+            <li>Zoom・Google Meet対応</li>
+            <li>相談後の簡単なサマリーメモ付き</li>
+            <li>追加の宿題・課題なし</li>
+          </ul>
+        </div>
+
+        <div class="service-card featured">
+          <p class="service-tag">最もご依頼が多い</p>
+          <h3 class="service-name">月次サポート</h3>
+          <div class="service-price">¥80,000<span>／月</span></div>
+          <p class="service-desc" style="color:rgba(255,255,255,0.6)">
+            月2回の定例MTG＋Slackでの随時相談。バックオフィスの「困ったとき」にすぐ動けます。
+          </p>
+          <ul class="service-features">
+            <li>月2回オンラインMTG（各60分）</li>
+            <li>Slack常駐での質問対応</li>
+            <li>テンプレート・フォーマット提供</li>
+            <li>スポット相談として単発利用も可</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <p class="service-tag">一気に整えたい方</p>
+          <h3 class="service-name">業務フロー構築</h3>
+          <div class="service-price">¥150,000<span>〜／一括</span></div>
+          <p class="service-desc">
+            業務の現状調査から、フロー設計・マニュアル作成・テンプレート納品まで一気通貫で対応します。
+          </p>
+          <ul class="service-features">
+            <li>現状ヒアリング（2〜3回）</li>
+            <li>業務フロー図・マニュアル納品</li>
+            <li>テンプレート一式（Word/Sheets）</li>
+            <li>納品後1ヶ月のフォローアップ</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <p class="section-label">Free Consultation</p>
+      <h2 class="section-title">まず、話すだけで大丈夫です。</h2>
+      <p class="cta-lead">
+        「何が問題かも分からない」という状態が一番多いです。<br>
+        30分話すだけで、整理できることがあります。<br>
+        無料なので、気軽にどうぞ。
+      </p>
+      <div class="cta-box">
+        <h3 class="cta-box-title">無料30分相談を予約する</h3>
+        <p class="cta-box-sub">
+          Googleフォームに入力いただくと、<br>
+          24時間以内に日程調整のご連絡をします。
+        </p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdeXn3KkZSFnZwI63PemwKuUkciCV5yKqK56In6el39jz7e0g/viewform" class="cta-main-btn" target="_blank">
+          → 今すぐ無料相談を申し込む（30分・無料）
+        </a>
+        <p class="cta-note">※ 売り込みは一切しません。合わなければ断っていただいて構いません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 BackOffice Pro. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
